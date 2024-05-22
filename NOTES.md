@@ -156,3 +156,133 @@ there are two types of functions:
 
 1. value returning functions
 2. void functions
+
+## Operators
+
+**Operators** are used along with other **operators/ variables** to create **Expressions** which is then used to create **Algorithms**.
+
+Operator types in JS:
+
+1. Arithmetic operators
+2. Assignment operators
+3. Comparison operators
+4. Logical operators
+5. Bitwise operators
+
+### Arithmetic Operators
+
+Are those operators used to calculate mathematic values
+
+1. **+** : addition operator used to sum two values
+2. **-** : subtraction operator used to subtract two values
+3. **\*** : multiplication operator used to multiply two values
+4. **/** : division operator used to divide one value onto another value
+5. **%** : remainder operator used to divide one value onto the second value and get the remainder of the division
+6. **\*\*** : exponentiation operator is used to raise the first value to the power of the second one
+7. **++** : increment it does both pre-increment and post-increment
+8. **--** : decrement it does both pre-decrement and post-decrement
+
+### Assignment Operator
+
+Assignment operator is used to assign a value to a variable which is well `=`.
+
+there are also:
+
+1. addition assignment operator:
+
+```js
+x = x + 1;
+x += 1;
+// in this case the same as
+x++;
+```
+
+2. subtraction assignment operator:
+
+```js
+x = x - 1;
+x -= 1;
+// in this case the same as
+x--;
+```
+
+3. multiplication assignment operator:
+
+```js
+x = x * 1;
+x *= 1;
+```
+
+4. division assignment operator:
+
+```js
+x = x / 1;
+x /= 1;
+```
+
+5. remainder assignment operator:
+
+```js
+x = x % 1;
+x %= 1;
+```
+
+### Comparison Operators
+
+are those that compare two values and results in a boolean
+
+1. **<**: less than operator
+2. **<=**: less than or equal-to operator
+3. **>**: greater than operator
+4. **>=**: greater than or equal-to operator
+5. **==**: lose equality operator compare two values but first converts the operand types to match each other
+6. **===**: strict equality operator compares tow operands without type conversion
+
+### Logical Operators
+
+A logical operator is a symbol or word used to connect two or more expressions.
+
+there are three logical operators
+
+1. logical **and** **&&**: results true if both operands evaluate to true
+2. logical **or** **||**: results true if at least one of the operands evaluate to true
+3. logical **not** **!**: used to reverse the result of an expression
+
+**NOTE**:
+the result of a logical operator is not necessarily a boolean value it depends what the value of the operands we have. well when JS engine runs an expression containing logical operators it first looks at each operand and if they are not boolean values it will try to interpret it as **truthy** or **falsy** values thus the result of the operation will be that truthy/falsy value.
+
+falsy values:
+
+1. false
+2. "" empty string
+3. 0
+4. undefined
+5. null
+6. NaN not a number
+
+truthy values:
+
+anything that is not falsy is truthy
+
+```js
+false || true; // true
+false || "Hello"; // Hello
+true || "Hello": // true
+false || "Hello" || 100 : // hello
+```
+
+when it comes to logical operators it doesn't matter how many operands we have as soon the operation can be completed it completes and the rest is skipped
+
+this behavior is called **short-circuiting**
+
+general rules:
+
+`false/falsy || expression => expression`
+`true/truthy || expression => true`
+
+`true/truthy && expression => expression`
+`false/falsy && expression => false`
+
+### Bitwise Operator
+
+well we skip this one
