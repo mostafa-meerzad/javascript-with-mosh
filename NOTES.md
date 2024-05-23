@@ -286,3 +286,178 @@ general rules:
 ### Bitwise Operator
 
 well we skip this one
+
+## Control Flow
+
+### If...Else
+
+if and else statements allow us to execute blocks of code conditionally.
+
+```js
+if (condition) {
+  // if condition is true this block will run
+} else if (secondCondition) {
+  // if first condition is false the control flow is passed to this if/else statement
+  //and if the condition evaluates to true this block will run
+} else {
+  // otherwise this block will run
+}
+```
+
+### Switch-Case
+
+Switch and case is similar to if/else statements and allows to check for multiple states of the condition
+
+```js
+switch (condition) {
+  // the condition variable is the variable you want to check for different cases
+  case "state1":
+    // if condition is equal to state1 this block will run
+    break; // we have to use break statement to stop the operation and jump out of switch/case
+
+  case "state2":
+    // if condition is equal to state2 this block will run
+    break;
+
+  // here you can have as many case statements as you need
+
+  default:
+  // this block will run if none of the conditions match just like else statement
+  // for the default statement we don't need break statement
+  // the switch/case has already reached the end
+}
+```
+
+if you don't use **break** statement the switch/case will continue running to the end
+
+```js
+let role = "guestss";
+
+switch (role) {
+  case "guest":
+    console.log("guest user");
+    break;
+
+  case "moderator":
+    console.log("moderator user");
+    break;
+
+  default:
+    console.log("default user");
+}
+```
+
+### For Loop
+
+if you want to repeat an action over and over
+
+```js
+for (initialExpression; condition; incrementExpression) {
+  // loop body
+  statements
+  statements...
+}
+
+for (let i = 0; i < 5; i++){
+  console.log("Hello")
+}
+```
+
+### While Loop
+
+while loop is just the same as for loop with a difference that the loop condition is not part of the loop syntax and has to be defined externally
+
+```js
+let loopVariable;
+while (condition){
+  loop body
+  // this will run as long the condition is evaluated to true
+
+  loopVariableUpdated
+}
+```
+
+```js
+let i = 0;
+while (i < 5) {
+  console.log("Hello");
+  i++;
+}
+```
+
+### Do-While Loop
+
+Do While loops are similar to While loop with one major difference that do/wile loops run at least once no matter the loopConditionStatement
+
+```js
+
+let loopCondition
+
+do {
+loop body
+// statements
+// statements
+loopCondition updated
+} while(loopCondition)
+```
+
+```js
+let i = 0;
+do {
+  console.log("Hello");
+  i++;
+} while (i < 5);
+```
+
+### Infinite Loops
+
+are those loops that run forever or until the program crashes
+
+```js
+let i = 0;
+while (i < 5) {
+  console.log("Hello");
+}
+```
+
+### For-in Loop
+
+for-in loop is a special loop that is used to iterate of indices of an array or keys of an object
+
+```js
+let obj = {};
+
+for (let i in obj) {
+  // i will hold each keys of the target object
+  console.log(i);
+  // access the values of each object key
+  console.log(obj[i]);
+}
+let arr = [];
+for (let i in arr) {
+  // i will be the indices of the array elements
+  console.log(i);
+  // access the values of each array index
+  console.log(arr[i]);
+}
+```
+
+### For-of Loop
+
+this loop is a new feature added in ES6 and is designed to iterate over the values of an iterable object like arrays, strings
+
+```js
+let arr = [];
+for (let x of arr){
+  // x here will be the elements of the array
+  console.log(x)
+}
+```
+
+### Break and Continue
+
+Break and Continue are tow important keywords that can change the behavior of the loops:
+
+**Break**: statement causes the loop to stop right there and the flow of the program moved to the outside of the loop.
+
+**Continue**: statement stops the loop and moves to the top of the loop and start the next iteration.
