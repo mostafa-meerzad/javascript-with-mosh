@@ -448,9 +448,9 @@ this loop is a new feature added in ES6 and is designed to iterate over the valu
 
 ```js
 let arr = [];
-for (let x of arr){
+for (let x of arr) {
   // x here will be the elements of the array
-  console.log(x)
+  console.log(x);
 }
 ```
 
@@ -461,3 +461,275 @@ Break and Continue are tow important keywords that can change the behavior of th
 **Break**: statement causes the loop to stop right there and the flow of the program moved to the outside of the loop.
 
 **Continue**: statement stops the loop and moves to the top of the loop and start the next iteration.
+
+## Objects
+
+Objects are collections of highly related variables and functions
+
+```js
+// an example of object literal
+cont circle = {
+  radius: 1.4,
+  location: {x: 1, y:10},
+  draw: function(){
+    console.log("drawing")
+  }
+}
+```
+
+### factory function
+
+factory function are literally factories that produce objects in other words factory functions are those functions that generate objects
+
+with factory-functions the logic is isolated into one single place which is a lot easier when it comes to debugging
+
+```js
+function createCircle(radius) {
+  return {
+    // other properties are remove for simplicity
+    radius,
+    draw() {
+      console.log("drawing");
+    },
+  };
+}
+
+const myCircle = createCircle(1.2);
+myCircle.draw();
+```
+
+**Note**: in ES6 if an object key and value are the same like above we're allowed to just use the key part, functions that are inside objects are referred to as methods or object-methods and to define them this is the pattern `{methodName(){//some logic}, key:value}`
+
+### Constructor Function
+
+Constructor functions are just like factory-function and are used to generate objects but the approach to do so is different
+
+Naming conventions for constructor-functions are different which their name must follow the **PascalNaming** convention
+
+```js
+function Circle(radius) {
+  this.radius = radius;
+  this.draw = function () {
+    console.log("drawing");
+  };
+}
+
+let myCircle = new Circle(1.6);
+myCircle.draw();
+```
+
+**Note**: when it comes to constructor-functions we need to use the **new** keyword when initializing a new object
+
+when we use the **new** keyword three things happen
+
+1. JS creates a new empty object
+2. JS makes the **this** keyword to point to that newly created empty object
+3. Lastly the constructor-function automatically returns that object
+
+so when we create a new object using a constructor-function we get a newly created empty object with all the properties and methods defined in the constructor-function
+
+**Note**: constructor-functions and factory-functions both do the same thing and both are legit
+
+### Dynamic Nature of Objects
+
+objects are dynamic which means you can add properties/methods to an object or delete existing ones using **delete** operator
+
+```js
+const circle = {
+  radius: 1.4,
+};
+// add new properties
+circle.color = "Yellow";
+circle.draw = function () {
+  console.log("drawing");
+};
+
+// delete properties
+
+delete circle.color;
+delete circle.draw;
+```
+
+**Note**: the `circle` variable is a constant and we cannot reassign a new value to is but the object it is holding is mutable and it's properties and methods can be altered
+
+### Constructor Property
+
+every object has a property called **constructor** which references the function used to construct/create that object
+
+the constructor property of an object returned form a **factory-function** is the default **Object** constructor
+
+the constructor property of an object created using a **constructor-function** is the **constructor-function** itself, because we use **new** keyword and that internally creates a new empty object.
+
+there are other constructor functions in JS as well: String(), Number(), Boolean(), and so on
+
+### Functions are Objects
+
+functions are objects
+
+### Value vs Reference Types
+
+there are two type of values in javascript
+
+1. Primitive types
+   1. Number
+   2. String
+   3. Boolean
+   4. Symbol
+   5. undefined
+   6. null
+2. Reference types
+   1. Object
+   2. Function
+   3. Array
+
+Primitive types are stored inside the variables on the other hand Reference types are stored in a location of memory and then a reference of that location is stored inside the variable
+
+```js
+let x = 10;
+let y = x;
+
+// now if you assign another value to the x the value of y doesn't change
+// variables are independent
+x = 20;
+
+console.log(x); //=> 20
+console.log(y); //=> 10
+
+let j = { value: 10 };
+let k = j;
+
+console.log(j.value); //=> 10
+console.log(k.value); //=> 10
+// now if you modify the value property of k that will effect the value of j as well
+
+k.value = 20;
+console.log(j.value); //=> 20
+console.log(k.value); //=> 20
+```
+
+Primitives are copied by their value
+Objects are copied by their references
+
+```js
+// here we have a variable that holds a number and we pass it to a function which adds one to it what do you think will happen?
+let number = 10;
+
+function increase(number) {
+  // this number variable in scoped inside this function only and it's value is increased only here
+  number++;
+}
+
+increase(number);
+
+console.log(number); //=> 10
+// the number variable still showing 10
+
+function increaseGlobal() {
+  // in this case the number variable is a global variable and it's value in increased by one
+  number++;
+}
+increaseGlobal();
+console.log(number);
+```
+
+### Enumerating Properties of an Object
+
+if we have an object and want to get each property/ methods of it we would use a loop
+
+```js
+let circle = {
+  radius: 1,
+  draw() {
+    console.log("drawing");
+  },
+};
+
+for (let key in circle) {
+  console.log(key, circle[key]); // => key value of circle
+}
+
+for (let key of circle) {
+  console.log(key); // => typeError: circle is not iterable
+}
+```
+
+Objects are not iterable so **for-of** loop is not going to work
+
+but `Object.keys(targetObj)` will return an array of all the keys of the **target** in the form of strings
+
+`Object.entries(targetObj)` returns an array of each key-value pairs of an object in the form of an array
+
+```js
+let myOjb = {
+  prop1: "value1",
+  prop2: "value2",
+  prop3: "value3",
+  method() {
+    console.log("something");
+  },
+};
+console.log(Object.keys(myOjb));
+// [ 'prop1', 'prop2', 'prop3', 'method' ]
+
+console.log(Object.entries(myOjb));
+// [
+//   [ 'prop1', 'value1' ],
+//   [ 'prop2', 'value2' ],
+//   [ 'prop3', 'value3' ],
+//   [ 'method', [Function: method] ]
+// ]
+
+for (const entry of Object.entries(myObj)) {
+  console.log(entry);
+}
+```
+
+to check if a property exists in an object we use the `in` operator
+
+```js
+let obj = {
+  color: "red",
+  width: 100,
+  height: 100,
+  draw() {
+    console.log("drawing");
+  },
+};
+
+"color" in obj; // => this expression returns a boolean
+```
+
+### Cloning an Object
+
+cloning an object means to copy each and every property/method of an object another object, we have several ways
+
+```js
+let square = {
+  color: "red",
+  width: 100,
+  height: 100,
+  draw() {
+    console.log("drawing");
+  },
+};
+
+let another = {};
+// using a for-in loop
+for (let key in square) {
+  another[key] = square[key];
+}
+
+console.log(square);
+console.log(another);
+// using Object.assign(targetObjectWhichYouWantToCopyTheOtherOne, sourceObjectWhichYouWantToCloneFrom) method
+let another = Object.assign({}, square);
+// using separate operator which is the best and modern way
+let another = { ...square };
+```
+
+### Garbage Collector
+
+A garbage collector is what responsible for deallocating variables and constants that are no longer being used.
+deallocating memory that was allocated to them earlier.
+
+this process is fully automatic and we have no control over it and we don't need to worry about it at all

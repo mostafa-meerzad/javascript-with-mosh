@@ -209,3 +209,22 @@ function isPrime(number) {
 showPrimes(10);
 showPrimes(15);
 showPrimes(21);
+
+const circle = {
+  radius: 1.4,
+};
+console.log(circle);
+
+circle.color = "yellow";
+circle.draw = function () {
+  console.log("drawing");
+};
+
+console.log(circle);
+console.log(circle.color);
+circle.draw()
+
+delete circle.color; 
+
+console.log(circle.color); // now color is undefined since we deleted it
+console.log(circle);
