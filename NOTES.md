@@ -733,3 +733,232 @@ A garbage collector is what responsible for deallocating variables and constants
 deallocating memory that was allocated to them earlier.
 
 this process is fully automatic and we have no control over it and we don't need to worry about it at all
+
+## Arrays
+
+Arrays are lists of objects stored in one place. In JS we can store different types of data in a single array
+
+### Adding elements
+
+just like objects we can add element to an array because it is mutable but if **const** is used to create the variable to hold the array we cannot reassign another value to that variable
+
+```js
+const myArray = [3, 5];
+// add elements to an array
+
+// End
+myArray.push(one, orMoreElements);
+
+// Beginning
+myArray.unshift(element);
+
+// Middle
+myArray.splice(start, numberOfElementToRemove, elementsToAdd);
+```
+
+`Array.push(elements)` this array method takes one or many elements or even another array/ object and adds at the end of the array.
+
+`Array.unshift(element)` this array method takes one or many elements or even another array/ object and adds at the beginning of the array.
+
+`Array.splice(startIndex, numberOfElementToRemove, numberOfElementsToAdd)` this array method takes one or many elements or even another array/object and adds/removes them from the specified location of the array. if you remove elements it returns a new array of those elements if you don't it will return an empty array
+
+### Finding elements (primitives)
+
+`Array.indexOf(element, searchStart)` returns the index of the provided element if not existing returns **-1** optionally you can pass a second argument which is the index you want the search to begin.
+
+`Array.lastIndexOf(element, searchStart)`return the index of the last element matching the provided element, optionally takes a second argument which is the index you want the search to begin.
+
+`Array.includes(element)` returns true if the provided element exists in the array otherwise returns false.
+
+### Finding elements (objects)
+
+```js
+Array.find(callBack(currentElement){
+  return "A Boolean expressing checking if the current element is what we want or not"
+})
+```
+
+this method return the element if exists other wise returns **undefined**
+
+for finding elements that are reference-type we need to use `find` method this is also useful for the primitive-type elements
+
+```js
+Array.findIndex(callBack(currentElement){
+  return "A Boolean expressing checking if the currentElement is what we want or not"
+})
+```
+
+this method return the index of the element that matches the criteria otherwise return **-1**
+
+### Removing elements
+
+`Array.pop()` this array method removes the last array element and returns it.
+
+`Array.shift()` this array method removes the first array element and returns it.
+
+`Array.splice(startIndex, numberOfElementToRemove, numberOfElementsToAdd)` this array method takes one or many elements or even another array/object and adds/removes them from the specified location of the array. if you remove elements it returns a new array of those elements if you don't it will return an empty array
+
+### Emptying an array
+
+If you need to clear all elements of an array there are several options
+
+```js
+let numbers = [1, 2, 4, 5];
+let another = numbers;
+
+numbers = []; // if your array is referenced anywhere else this approach is not working
+
+numbers.length = 0; // by setting the length of an array to 0 you can empty it
+
+numbers.splice(1, numbers.length); // this method is a little noisy and might ge confusing
+// this method is also not great specially when dealing with a large array
+while (numbers.length > 0) {
+  numbers.pop();
+}
+```
+
+### Combining Arrays
+
+for combining there are following ways
+
+`firstArray.concat(secondArray)` this method returns a new arrays containing all the elements of both arrays
+
+for slicing arrays are following ways
+
+`Array.slice(startIndex, endIndex)` returns a new array containing elements from startingIndex-element to the endIndex-element bot not the endIndex-element.
+
+**startIndex** is 0 by default and the **endIndex** is the **targetArray.length-1**
+
+`Array.slice()` with no start/end indices this method returns a new copy of the target element
+
+`Array.slice(startIndex)` with just starting index returns a new arrays containing all elements starting from the specified index to the end.
+
+in ES6 we have **spread** operator which is very flexible makes those array operations easy and returns all the element of target array
+
+```js
+let arr1 = [1, 2, 4, 5];
+let arr2 = [...arr]; // create a new copy of an array
+let arr2 = [...arr, 33, 88, 00]; // copy all elements form arr1 to arr2 before specified elements
+let arr2 = ["something", 77, 99, ...arr]; // copy all elements form arr1 to arr2 after specified elements
+let arr2 = ["something", 77, ...arr, "another"]; // copy all elements form arr1 to arr2 between it's elements
+```
+
+**Note**: when combining/slicing array primitive-type elements are copied by their values and they are completely independent on the other hand reference/object-type elements are copied and sliced by their references which means any changes appear in those values they will be reflected in all of them.
+
+### Iterating an Array
+
+here are the ways to iterate over elements of an array
+
+```js
+let array = [1, 2, 3, 4, 6];
+for (const element of array) {
+  // here element will represent each element of the array
+  console.log(element);
+}
+
+array.forEach(function (currentElement, indexOfCurrentElement) {
+  // here element will represent each element of the array
+  // indexOfCurrentElement will represent the index of currentElement
+  // some logic here...
+});
+```
+
+the **forEach** array method takes a **callback** an that callback is executed on each element of the target array
+
+### Joining Arrays
+
+joining arrays
+
+`Array.join(separator)` this method takes a **separator** and return a string with all array elements separated using the specified separator
+
+```js
+let arr = [1, 2, 3, 5];
+let joined = arr.join(" "); // returns a string with each element separated with given separator
+```
+
+`Array.join(separator)` works hand in hand with `String.split(separator)` which returns an array of all elements separated with specified separator
+
+### Sorting Arrays
+
+for sorting arrays we have `Array.sort(callback)` method that takes a callback function used to determine the order of the elements.
+
+It is expected to return a **negative** value if the first argument is less than the second argument, **zero** if they're equal, and a **positive** value otherwise. If omitted, the elements are sorted in ascending, **ASCII** character order.
+
+**Note**: think of this algorithm like this: if **a** must go before **b** return (+1), if **b** must go before **a** return (-1), if they are the same return (0) in ascending order and for descending order it's the opposite.
+
+`Array.sort()` // sorts elements in ascending order by default (no callback provided)
+
+```js
+let arr = [1, 4, 2, 3];
+
+arr.sort(function (a, b) {
+  if (a < b) return -1;
+  if (b < a) return 1;
+  return 0;
+});
+```
+
+`Array.reverse()` // reverses the order of elements in an array
+
+**Note**: these methods mutate the array and returns a reference to the same array
+
+**Note**: **sort** method works just fine for primitive-types but for reference-types you need to do more work and define bottlenecks
+
+```js
+let courses = [
+  { id: 1, name: "Javascript" },
+  { id: 2, name: "Node.js" },
+];
+```
+
+### Testing the Elements of an Array
+
+if you need to test elements of an array to verify each or some of the elements match a certain criteria or not
+
+`Array.every()` and `Array.some()` returns a boolean
+
+```js
+Array.every(function (currentElement) {
+  // here define a criteria that returns a boolean
+  return currentElement >= 100;
+});
+```
+
+### Filtering an Array
+
+to get all the elements of an array based on some condition you can use `Array.filter()` which returns a new array containing all the elements matching the specified criteria
+
+```js
+let numbers = [1, 2, 5, 76, 8, 9];
+
+let evenNumbers = numbers.filter(function (num) {
+  return rum % 2 === 0;
+});
+```
+
+### Mapping an Array
+
+with **map** method we can map each element of an array to something else
+
+```js
+
+const numbers = [1, 2,3 5,6]
+
+const items = numbers.map(n => {value: n})
+```
+
+### Reducing an Array
+
+`Array.reduce()` is a very useful method which can do pretty much every operation we can do with an array reduce method runs over each element in an array.
+
+````js
+Array.reduce(callback(accumulator, currentElement){
+  // some logic
+  return //the result of the operation
+}, accumulatorInitialValue)```
+
+```js
+let numbers = [1, -1, 4, 8];
+
+let sum = numbers.reduce((acc, elem) => acc + elem, 0);
+````

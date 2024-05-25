@@ -153,3 +153,93 @@ let square = {
 let other = { ...square };
 console.log(square);
 console.log(other);
+
+console.log("----------------------------------");
+let myArray = [1, 3, 5];
+
+myArray.push("something");
+console.log(myArray);
+myArray.push("something", "something else");
+console.log(myArray);
+
+let myArray1 = [1, 3, 5];
+myArray1.unshift("something");
+console.log(myArray1);
+myArray1.unshift("something", "something else");
+console.log(myArray1);
+
+let myArray2 = [1, 2, 4];
+myArray2.splice(1, 0, "somethingElse");
+console.log(myArray2);
+myArray2.splice(1, 0, "somethingElse", "something else");
+console.log(myArray2);
+
+console.log("----------------------------");
+console.log(1 in myArray2);
+console.log(myArray2.includes(1));
+
+let myNewArray = myArray.findIndex(function (e) {
+  return e === 2;
+});
+
+console.log(myNewArray);
+console.log("-----------------------------------");
+
+console.log(myArray.pop());
+console.log(myArray.shift());
+console.log(myArray.splice(1, 1));
+console.log("-----------------------------");
+
+let arr = [1, 2, 3];
+
+console.log(arr.splice(1, 0, 22));
+
+console.log(arr);
+
+console.log("first".split("r"));
+console.log("----------------------------------");
+
+let array3 = [1, 4, 2, 4];
+
+console.log(array3.sort());
+console.log(array3.reverse());
+console.log("-----------------------------------");
+
+let courses = [
+  { id: 2, name: "BNode.js" },
+  { id: 1, name: "AJavascript" },
+];
+
+console.log(
+  courses.sort(function (a, b) {
+    if (a.id > b.id) return 1;
+    if (a.id < b.id) return -1;
+    return 0;
+  })
+);
+console.log(
+  courses.sort(function (a, b) {
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
+    return 0;
+  })
+);
+
+console.log("N" < "J");
+
+console.log("------------------------");
+
+const numbers = [1, 2, 3, 5, 6];
+
+const items = numbers.map((n) => ({
+  value: n,
+}));
+
+console.log(items);
+
+console.log("--------------------------");
+
+let nums = [1, -1, 4, 8];
+
+let sum = nums.reduce((acc, elem) => acc + elem, 10);
+console.log(sum);
