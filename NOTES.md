@@ -1078,6 +1078,22 @@ are special object methods that allow us to access or set values to properties o
 
 **setters**: used to change properties
 
+if you want to create immutable properties you can use getters
+
+```js
+const circle = {
+    radius:2,
+    get area(){
+        return Math.PI * this.radius**2
+    }
+}
+console.log(circle.radius);
+console.log(circle.area());
+circle.area = ()=> "something else" // trying to mutate the area property you get an exception
+console.log(circle.area());
+
+```
+
 ```js
 let person = {
   name: "Mostafa",
