@@ -1,4 +1,4 @@
-# Objects
+## Objects
 
 In object-oriented programming (OOP), an object is a fundamental unit of abstraction that represents a real-world entity or concept. Objects encapsulate both data (attributes or properties) and behaviors (methods or functions) that operate on that data.
 
@@ -21,3 +21,22 @@ Here's a breakdown of key concepts related to objects in OOP:
 8. **Polymorphism**: Polymorphism allows objects of different classes to be treated as objects of a common superclass. It enables flexibility and extensibility in object-oriented systems by allowing different classes to implement the same interface or method in different ways.
 
 In summary, objects in OOP are the building blocks that allow developers to model real-world entities in their programs, providing a powerful way to organize and structure code.
+
+
+## Private Properties and Methods
+
+```js
+function Circle(radius){
+this.radius = radius;
+this.defaultLocation = {x: 0, y: 0};
+this.computeOptimumLocation = function(factor){
+    //...
+}
+this.draw = function(){
+    this.computeOptimumLocation(0.1)
+    console.log("draw")
+}
+}
+
+const circle = new Circle(10)
+```

@@ -1,4 +1,3 @@
-js;
 //---------------- this approach is called procedural-paradigm -----------------
 let baseSalary = 30000;
 let overTime = 10;
@@ -17,4 +16,27 @@ let employee = {
   },
 };
 
-employee.getWage()
+employee.getWage();
+
+// --------------------
+
+function Person(name, lastName) {
+  this.name = name;
+  this.lastName = lastName;
+  // one way to create a getter
+
+  Object.defineProperty(this, "getFullName", {
+    get: function () {
+      return `${this.name} ${this.lastName}`;
+    },
+    set: function (fullName) {
+      this.name = fullName;
+    },
+  });
+}
+let person = new Person("John", "Doe");
+console.log(person.name);
+// console.log(person.getFullName());
+console.log(person.getFullName);
+person.getFullName = "something new" 
+console.log(person.getFullName);
