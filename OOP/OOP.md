@@ -58,3 +58,4 @@ OOP is a programming paradigm centered around objects rather than functions.
 2. **Abstraction**: reduce complexity + isolate impact of changes
 3. **Inheritance**: eliminate redundant code
 4. **Polymorphism**: refactor ugly switch/case statements
+
