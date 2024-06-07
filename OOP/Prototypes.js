@@ -1,13 +1,20 @@
-// function Circle(radius) {
-//   this.radius = radius;
-//   this.draw = () => {
-//     console.log("drawing");
-//   };
-// }
+function Circle(radius) {
+  this.radius = radius;
+  this.draw = () => {
+    console.log("drawing");
+  };
+}
 
-// const myCircle = new Circle(4);
+const myCircle = new Circle(4);
+
+Circle.prototype.location = () => {console.log("default location")}
+
+console.log(myCircle.hasOwnProperty("radius"))
+console.log(myCircle.hasOwnProperty("draw"))
+console.log(myCircle.hasOwnProperty("location"))
 
 
+//-----------------------------
 
 let person = {name:"John"}
 // let objectBase = Object.getPrototypeOf(person)

@@ -211,3 +211,185 @@ console.log(obj.prop); // 10
 ### Summary
 
 Property descriptors provide a powerful way to control the behavior of properties in JavaScript objects. They allow developers to define properties with specific characteristics, such as being read-only, non-enumerable, or having custom getter and setter functions. This feature is essential for creating more robust and secure JavaScript applications.
+
+## Constructor Prototypes
+
+Constructor functions also have prototype which inherits all there members from and that prototype is the same for all objects created using that constructor function.
+
+## Prototype vs Instance Members
+
+In JavaScript, objects can have both prototype members and instance members. Understanding the difference between these two types of members is crucial for effective object-oriented programming in JavaScript.
+
+### Prototype Members
+
+Prototype members are properties and methods that are defined on an object's prototype. Every JavaScript object has a prototype, which is an object itself, and objects inherit properties and methods from their prototypes. When a method or property is defined on a prototype, all instances of that object share that method or property.
+
+#### Example:
+
+```javascript
+// Constructor function
+function Animal(name) {
+  this.name = name; // Instance member
+}
+
+// Defining a prototype method
+Animal.prototype.speak = function () {
+  console.log(this.name + " makes a sound");
+};
+
+// Creating instances
+let dog = new Animal("Dog");
+let cat = new Animal("Cat");
+
+// Both instances share the same speak method from the prototype
+dog.speak(); // Dog makes a sound
+cat.speak(); // Cat makes a sound
+
+// Checking prototype members
+console.log(dog.hasOwnProperty("speak")); // false
+console.log(Animal.prototype.hasOwnProperty("speak")); // true
+```
+
+### Instance Members
+
+Instance members are properties and methods that are defined directly on the instance of the object, typically inside the constructor function. Each instance of the object has its own copy of these properties and methods.
+
+#### Example:
+
+```javascript
+// Constructor function
+function Animal(name) {
+  this.name = name; // Instance member
+
+  // Defining an instance method
+  this.speak = function () {
+    console.log(this.name + " makes a sound");
+  };
+}
+
+// Creating instances
+let dog = new Animal("Dog");
+let cat = new Animal("Cat");
+
+// Both instances have their own speak method
+dog.speak(); // Dog makes a sound
+cat.speak(); // Cat makes a sound
+
+// Checking instance members
+console.log(dog.hasOwnProperty("speak")); // true
+console.log(cat.hasOwnProperty("speak")); // true
+```
+
+### Key Differences
+
+1. **Shared vs. Individual**:
+
+   - **Prototype Members**: Shared among all instances of the object. Any changes to the prototype member are reflected in all instances.
+   - **Instance Members**: Unique to each instance. Changes to an instance member affect only that particular instance.
+
+2. **Memory Usage**:
+
+   - **Prototype Members**: More memory-efficient as the method or property is stored once on the prototype and shared.
+   - **Instance Members**: Each instance has its own copy, which can consume more memory if many instances are created.
+
+3. **Inheritance**:
+   - **Prototype Members**: Inherited by all instances. If a method is not found on the instance, JavaScript looks up the prototype chain.
+   - **Instance Members**: Not inherited by other instances. They are specific to the instance where they are defined.
+
+### Combining Prototype and Instance Members
+
+It is common to use both prototype and instance members to balance memory efficiency and flexibility:
+
+```javascript
+function Animal(name) {
+  this.name = name; // Instance member
+}
+
+Animal.prototype.speak = function () {
+  console.log(this.name + " makes a sound");
+};
+
+Animal.prototype.walk = function () {
+  console.log(this.name + " is walking");
+};
+
+let dog = new Animal("Dog");
+let cat = new Animal("Cat");
+
+// Using instance and prototype members
+dog.speak(); // Dog makes a sound
+cat.speak(); // Cat makes a sound
+dog.walk(); // Dog is walking
+cat.walk(); // Cat is walking
+```
+
+In this combined approach, instance-specific data (like `name`) is stored in instance members, while shared behavior (like `speak` and `walk` methods) is defined on the prototype. This approach leverages the benefits of both instance and prototype members.
+
+## Iterating Properties
+
+When adding members to the prototype it doesn't matter you apply changes to the prototype before creating an instance or after because there is only reference in the memory and changes to that is reflected to all the instances
+
+**Note**: `Object.keys(targetObj)` only returns instance members not prototype members, but a for loop iterates over all keys of an object no matter the object members are coming from **instance** or **prototype**
+
+`targetObj.hasOwnProperty(propertyName)` method is used to check if a property is defined in the instance or prototype
+
+**Note**: **instance properties** are also known as **own properties**
+
+In JavaScript, you can check if a property is not an own property (i.e., it's inherited from the prototype) by using the `hasOwnProperty` method. This method checks if the object itself has the specified property, without looking up the prototype chain.
+
+If you want to determine whether a property is inherited (not an own property), you can combine `hasOwnProperty` with the `in` operator. The `in` operator checks if a property exists in the object or its prototype chain.
+
+Here is how you can do it:
+
+1. Use `hasOwnProperty` to check if the property is an own property.
+2. Use the `in` operator to check if the property exists in the object or its prototype chain.
+3. If the property exists (checked with `in`) but is not an own property (checked with `hasOwnProperty`), it means the property is inherited.
+
+### Example
+
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.speak = function() {
+    console.log(this.name + ' makes a sound');
+};
+
+let dog = new Animal('Dog');
+
+// Checking if 'speak' is an own property
+console.log(dog.hasOwnProperty('speak')); // false
+
+// Checking if 'name' is an own property
+console.log(dog.hasOwnProperty('name')); // true
+
+// Checking if 'speak' is inherited
+if ('speak' in dog && !dog.hasOwnProperty('speak')) {
+    console.log("'speak' is an inherited property");
+}
+
+// Checking if 'name' is inherited
+if ('name' in dog && !dog.hasOwnProperty('name')) {
+    console.log("'name' is an inherited property");
+} else {
+    console.log("'name' is an own property");
+}
+```
+
+### Explanation
+
+1. **`hasOwnProperty` Method**:
+   - `dog.hasOwnProperty('speak')` returns `false` because `speak` is not an own property of `dog`; it is inherited from `Animal.prototype`.
+   - `dog.hasOwnProperty('name')` returns `true` because `name` is an own property of `dog`.
+
+2. **`in` Operator**:
+   - `'speak' in dog` returns `true` because `speak` exists in the prototype chain of `dog`.
+   - `'name' in dog` returns `true` because `name` exists as an own property of `dog`.
+
+3. **Combined Check**:
+   - The condition `if ('speak' in dog && !dog.hasOwnProperty('speak'))` evaluates to `true`, confirming that `speak` is inherited.
+   - The condition `if ('name' in dog && !dog.hasOwnProperty('name'))` evaluates to `false`, confirming that `name` is an own property.
+
+This approach allows you to distinguish between own properties and inherited properties effectively.
+
