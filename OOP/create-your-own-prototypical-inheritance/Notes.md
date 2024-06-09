@@ -237,3 +237,107 @@ dog.speak(); // Rex barks
 console.log(dog instanceof Dog); // true
 console.log(dog instanceof Animal); // true
 ```
+
+## Polymorphism
+
+Polymorphism is a fundamental concept in object-oriented programming (OOP) that allows objects of different classes to be treated as objects of a common super class. It enables methods to be used interchangeably across different objects, even if these objects are instances of different classes. Polymorphism enhances flexibility and maintainability in code by allowing a single interface to represent different underlying forms (data types).
+
+### Types of Polymorphism
+
+There are two main types of polymorphism:
+
+1. **Compile-Time Polymorphism (Static Binding):**
+
+   - Achieved through method overloading and operator overloading.
+   - Determined at compile time.
+   - JavaScript does not natively support method overloading or operator overloading like some other languages (e.g., C++, Java).
+
+2. **Run-Time Polymorphism (Dynamic Binding):**
+   - Achieved through method overriding.
+   - Determined at runtime.
+   - JavaScript supports run-time polymorphism through prototypal inheritance and method overriding.
+
+### Polymorphism in JavaScript
+
+In JavaScript, polymorphism is primarily achieved through method overriding. Here’s how you can implement and understand polymorphism using JavaScript's prototypal inheritance:
+
+### Example: Polymorphism with Method Overriding
+
+1. **Define a Base Class:**
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a sound`);
+  }
+}
+```
+
+2. **Define Derived Classes:**
+
+```javascript
+class Dog extends Animal {
+  speak() {
+    console.log(`${this.name} barks`);
+  }
+}
+
+class Cat extends Animal {
+  speak() {
+    console.log(`${this.name} meows`);
+  }
+}
+```
+
+3. **Create Instances of the Derived Classes:**
+
+```javascript
+const animals = [new Dog("Rex"), new Cat("Whiskers")];
+
+animals.forEach((animal) => animal.speak());
+// Output:
+// Rex barks
+// Whiskers meows
+```
+
+### Explanation
+
+1. **Base Class (`Animal`):**
+   - Defines a generic `speak` method.
+2. **Derived Classes (`Dog` and `Cat`):**
+   - Override the `speak` method to provide specific implementations for `Dog` and `Cat`.
+3. **Polymorphic Behavior:**
+   - An array of `Animal` objects (containing instances of `Dog` and `Cat`) is iterated over, and the `speak` method is called on each object.
+   - The correct `speak` method is called based on the actual object type (either `Dog` or `Cat`), demonstrating polymorphic behavior.
+
+### Practical Use of Polymorphism
+
+Polymorphism allows for writing more generic and reusable code. Consider a function that processes a list of animals:
+
+```javascript
+function makeAnimalsSpeak(animals) {
+  animals.forEach((animal) => animal.speak());
+}
+
+const animals = [
+  new Dog("Rex"),
+  new Cat("Whiskers"),
+  new Animal("Generic Animal"),
+];
+
+makeAnimalsSpeak(animals);
+// Output:
+// Rex barks
+// Whiskers meows
+// Generic Animal makes a sound
+```
+
+In this function, `makeAnimalsSpeak`, the same code works for different types of `Animal` objects. The function doesn't need to know the specific type of animal; it simply calls `speak` on each one, and the appropriate method is executed based on the actual object type.
+
+### Summary
+
+Polymorphism in JavaScript, mainly achieved through method overriding, allows objects of different classes to be treated as objects of a common super class. This enables the same method to behave differently based on the object it is called on, providing flexibility and reusability in code. By leveraging polymorphism, developers can write more abstract and generalized code, reducing duplication and improving maintainability.
