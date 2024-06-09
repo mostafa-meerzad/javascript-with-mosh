@@ -214,7 +214,7 @@ Property descriptors provide a powerful way to control the behavior of propertie
 
 ## Constructor Prototypes
 
-Constructor functions also have prototype which inherits all there members from and that prototype is the same for all objects created using that constructor function.
+Constructor functions also have prototype which inherits all their members from and that prototype is the same for all objects created using that constructor function.
 
 ## Prototype vs Instance Members
 
