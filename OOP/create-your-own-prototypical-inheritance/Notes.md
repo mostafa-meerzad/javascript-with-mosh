@@ -151,3 +151,89 @@ Setting `Dog.prototype.constructor = Dog` is a crucial step in ensuring that the
 
 ## Method Overriding
 
+If a method or property inherited from the base constructor needs to be overridden in the derived constructor, you can simply define the method or property on the derived constructor's prototype with the same name. This will replace the inherited method or property with the one defined in the derived constructor.
+
+Here’s a step-by-step guide on how to override methods and properties:
+
+### Example
+
+1. Define the Base Constructor Function with a method.
+2. Define the Derived Constructor Function and call the base constructor.
+3. Set Up Inheritance by setting the prototype of the derived constructor to an object created from the base constructor's prototype.
+4. Override the Method by defining a method with the same name on the derived constructor's prototype.
+
+### Step-by-Step Implementation
+
+#### Step 1: Define the Base Constructor Function
+
+```js
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function () {
+  console.log(this.name + " makes a sound");
+};
+```
+
+#### Step 2: Define the Derived Constructor Function
+
+```js
+function Dog(name, breed) {
+  Animal.call(this, name); // Call the parent constructor
+  this.breed = breed;
+}
+```
+
+### Step 3: Set Up Inheritance
+
+```js
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+```
+
+### Step 4: Override the Method
+
+```js
+Dog.prototype.speak = function () {
+  console.log(this.name + " barks");
+};
+```
+
+### Full Example
+
+```js
+// Base constructor function
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function () {
+  console.log(this.name + " makes a sound");
+};
+
+// Derived constructor function
+function Dog(name, breed) {
+  Animal.call(this, name); // Call the parent constructor
+  this.breed = breed;
+}
+
+// Setting up inheritance
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+// Overriding the speak method in Dog
+Dog.prototype.speak = function () {
+  console.log(this.name + " barks");
+};
+
+// Creating an instance of Dog
+let dog = new Dog("Rex", "German Shepherd");
+
+// Using the overridden method
+dog.speak(); // Rex barks
+
+// Checking prototype chain
+console.log(dog instanceof Dog); // true
+console.log(dog instanceof Animal); // true
+```
