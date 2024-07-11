@@ -53,7 +53,7 @@ every object in JS directly or indirectly inherits from **Object Base**.
 
 here is the **Object Base** in action
 
-object **x** and **y** is created and their prototype is shown which is that **Object Base** and it has not prototype property which means it itself is the base implementation
+object **x** and **y** is created and their prototype is shown which is that **Object Base** and it has no prototype property which means it itself is the base implementation
 ![objectBase](<Screenshot%20(18).png>)
 
 the object that we call **Object Base** has just one instance on memory here is the prove
@@ -327,7 +327,7 @@ In this combined approach, instance-specific data (like `name`) is stored in ins
 
 ## Iterating Properties
 
-When adding members to the prototype it doesn't matter you apply changes to the prototype before creating an instance or after because there is only reference in the memory and changes to that is reflected to all the instances
+When adding members to the prototype it doesn't matter you apply changes to the prototype before creating an instance or after because there is only one reference in the memory and changes to that is reflected to all the instances
 
 **Note**: `Object.keys(targetObj)` only returns instance members not prototype members, but a for loop iterates over all keys of an object no matter the object members are coming from **instance** or **prototype**
 

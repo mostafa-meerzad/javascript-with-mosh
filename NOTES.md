@@ -235,7 +235,7 @@ are those that compare two values and results in a boolean
 2. **<=**: less than or equal-to operator
 3. **>**: greater than operator
 4. **>=**: greater than or equal-to operator
-5. **==**: lose equality operator compare two values but first converts the operand types to match each other
+5. **==**: loose equality operator compare two values but first converts the operand types to match each other
 6. **===**: strict equality operator compares tow operands without type conversion
 
 ### Logical Operators
@@ -723,7 +723,7 @@ console.log(square);
 console.log(another);
 // using Object.assign(targetObjectWhichYouWantToCopyTheOtherOne, sourceObjectWhichYouWantToCloneFrom) method
 let another = Object.assign({}, square);
-// using separate operator which is the best and modern way
+// using spread operator which is the best and modern way
 let another = { ...square };
 ```
 
@@ -810,7 +810,7 @@ numbers = []; // if your array is referenced anywhere else this approach is not 
 
 numbers.length = 0; // by setting the length of an array to 0 you can empty it
 
-numbers.splice(1, numbers.length); // this method is a little noisy and might ge confusing
+numbers.splice(0, numbers.length); // this method is a little noisy and might ge confusing
 // this method is also not great specially when dealing with a large array
 while (numbers.length > 0) {
   numbers.pop();
@@ -825,7 +825,7 @@ for combining there are following ways
 
 for slicing arrays are following ways
 
-`Array.slice(startIndex, endIndex)` returns a new array containing elements from startingIndex-element to the endIndex-element bot not the endIndex-element.
+`Array.slice(startIndex, endIndex)` returns a new array containing elements from startingIndex-element to the endIndex-element but not the endIndex-element.
 
 **startIndex** is 0 by default and the **endIndex** is the **targetArray.length-1**
 
@@ -884,7 +884,7 @@ for sorting arrays we have `Array.sort(callback)` method that takes a callback f
 
 It is expected to return a **negative** value if the first argument is less than the second argument, **zero** if they're equal, and a **positive** value otherwise. If omitted, the elements are sorted in ascending, **ASCII** character order.
 
-**Note**: think of this algorithm like this: if **a** must go before **b** return (+1), if **b** must go before **a** return (-1), if they are the same return (0) in ascending order and for descending order it's the opposite.
+**Note**: think of this algorithm like this: if **a** must go before **b** return (-1), if **b** must go before **a** return (+1), if they are the same return (0) in ascending order and for descending order it's the opposite.
 
 `Array.sort()` // sorts elements in ascending order by default (no callback provided)
 
@@ -893,7 +893,7 @@ let arr = [1, 4, 2, 3];
 
 arr.sort(function (a, b) {
   if (a < b) return -1;
-  if (b < a) return 1;
+  if (a > b) return 1;
   return 0;
 });
 ```
@@ -1088,9 +1088,9 @@ const circle = {
     }
 }
 console.log(circle.radius);
-console.log(circle.area());
+console.log(circle.area); // area is a getter method and is called just like a property
 circle.area = ()=> "something else" // trying to mutate the area property you get an exception
-console.log(circle.area());
+console.log(circle.area);
 
 ```
 
@@ -1114,7 +1114,7 @@ let person = {
 
 person.name;
 person.lastName;
-person.fullName(); //=> Mostafa Meerzad  // this is a normal method so we need to put a pair of parentheses
+person.fullName; //=> Mostafa Meerzad  // this is a normal method so we need to put a pair of parentheses
 person.fullName; //=> Mostafa Meerzad // this is a getter method so no need to put parentheses
 person.fullName = "John Smith"; // this is how to change object-property using setter method
 person.fullName; //=> John Smith
