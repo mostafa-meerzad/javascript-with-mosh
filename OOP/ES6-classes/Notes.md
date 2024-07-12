@@ -308,3 +308,109 @@ Timeout callback
 ```
 
 The event loop ensures that JavaScript can handle asynchronous operations efficiently, maintaining a smooth user experience and preventing blocking code execution.
+
+## "This" Keyword in Classes
+
+The `this` keyword in JavaScript refers to the object it belongs to. Its value depends on where it is used and how the function it appears in is called. In the context of classes, `this` refers to the instance of the class that the method is called on.
+
+### Understanding `this` in Classes
+
+In JavaScript classes, `this` is used to refer to the current instance of the class, allowing you to access and manipulate the instance's properties and methods. Here's a detailed explanation with examples:
+
+### Example Class
+
+Let's start with a simple class to illustrate how `this` works:
+
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(
+      `Hello, my name is ${this.name} and I am ${this.age} years old.`
+    );
+  }
+
+  haveBirthday() {
+    this.age += 1;
+    console.log(`It's my birthday! I am now ${this.age} years old.`);
+  }
+}
+
+const john = new Person("John", 30);
+john.greet(); // "Hello, my name is John and I am 30 years old."
+john.haveBirthday(); // "It's my birthday! I am now 31 years old."
+```
+
+### How `this` Works in the Example
+
+1. **Constructor**:
+
+   - When a new instance of `Person` is created (e.g., `const john = new Person('John', 30);`), the constructor method is called.
+   - Inside the constructor, `this` refers to the new instance being created. So, `this.name` sets the `name` property of `john` to `'John'`, and `this.age` sets the `age` property of `john` to `30`.
+
+2. **Methods**:
+   - In the `greet` method, `this.name` and `this.age` refer to the `name` and `age` properties of the instance calling the method. So, `john.greet()` logs `"Hello, my name is John and I am 30 years old."`.
+   - Similarly, in the `haveBirthday` method, `this.age` refers to `john`'s `age` property. The method increments `john`'s age by 1 and logs the updated age.
+
+### Important Points about `this`
+
+1. **Context**: The value of `this` is determined by the context in which a function is called. In class methods, `this` refers to the instance of the class.
+
+2. **Arrow Functions**: Arrow functions do not have their own `this` context. Instead, they inherit `this` from the surrounding lexical context (i.e., the enclosing function or class).
+
+   ```javascript
+   class Counter {
+     constructor() {
+       this.count = 0;
+     }
+
+     increment() {
+       // Regular function
+       setTimeout(function () {
+         console.log(this.count); // undefined (or error in strict mode)
+       }, 1000);
+
+       // Arrow function
+       setTimeout(() => {
+         console.log(this.count); // Correctly refers to the Counter instance
+       }, 1000);
+     }
+   }
+
+   const counter = new Counter();
+   counter.increment();
+   ```
+
+   In this example, the regular function inside `setTimeout` has its own `this` (which is `undefined` in strict mode or refers to the global object in non-strict mode). The arrow function inherits `this` from the `increment` method, correctly referring to the `Counter` instance.
+
+3. **Binding `this`**: If you need to ensure a function uses the correct `this`, you can explicitly bind it using `Function.prototype.bind`, or use arrow functions for callbacks to preserve the context.
+
+   ```javascript
+   class Counter {
+     constructor() {
+       this.count = 0;
+       this.increment = this.increment.bind(this); // Binding `this`
+     }
+
+     increment() {
+       console.log(this.count); // Correctly refers to the Counter instance
+     }
+   }
+
+   const counter = new Counter();
+   const increment = counter.increment;
+   increment(); // 0 (correctly refers to the Counter instance due to binding)
+   ```
+
+### Summary
+
+- In classes, `this` refers to the instance of the class.
+- The context of `this` is determined by how a function is called.
+- Arrow functions inherit `this` from the enclosing context.
+- You can use `bind` to ensure functions use the correct `this`.
+
+Understanding how `this` works in classes helps in managing instance properties and methods effectively, leading to more robust and predictable code.
