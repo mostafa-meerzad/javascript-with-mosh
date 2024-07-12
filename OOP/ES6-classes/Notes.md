@@ -223,3 +223,88 @@ In this example:
 
 Understanding hoisting helps in writing more predictable and error-free JavaScript code.
 
+## Event-Loop
+
+The event loop is a fundamental concept in JavaScript that enables asynchronous programming and handles the execution of non-blocking operations. Understanding the event loop is crucial for grasping how JavaScript handles operations like I/O, timers, and user interactions without blocking the execution of code. Here’s an in-depth explanation:
+
+### How the Event Loop Works
+
+1. **Call Stack**: This is where JavaScript keeps track of function calls. When a function is invoked, it is added to the call stack. When the function returns, it is removed from the call stack.
+
+2. **Web APIs**: These are provided by the browser (or Node.js in a server environment) and include features like `setTimeout`, `DOM events`, and AJAX requests. When these functions are called, they are handled outside of the call stack.
+
+3. **Callback Queue (Task Queue)**: This is where callbacks from asynchronous operations (like timers or event listeners) are queued. Once the main execution stack is empty, the event loop picks the next callback from this queue and pushes it onto the call stack.
+
+4. **Event Loop**: This is the mechanism that coordinates the call stack and the callback queue. It constantly checks if the call stack is empty. If it is, it pushes the first callback from the callback queue to the call stack, thus executing it.
+
+### Event Loop Cycle
+
+Here’s a simplified view of the event loop cycle:
+
+1. **Check Call Stack**: If the call stack is not empty, the event loop waits until it is empty.
+2. **Check Callback Queue**: If the call stack is empty, the event loop checks the callback queue.
+3. **Execute Callbacks**: The event loop pushes the first callback from the callback queue onto the call stack and executes it.
+4. **Repeat**: This process repeats continuously, enabling JavaScript to handle asynchronous operations.
+
+### Example
+
+Consider the following example to illustrate how the event loop works:
+
+```javascript
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout callback");
+}, 1000);
+
+console.log("End");
+```
+
+1. **Execution Begins**: The `console.log('Start')` statement is pushed to the call stack and executed.
+2. **setTimeout**: The `setTimeout` function is called and a timer is set. The callback is sent to the Web APIs to wait for the timer.
+3. **End Log**: The `console.log('End')` statement is pushed to the call stack and executed.
+4. **Event Loop**: After 1000ms, the timer expires, and the callback from `setTimeout` is moved to the callback queue.
+5. **Callback Execution**: The event loop sees the call stack is empty and pushes the `setTimeout` callback to the call stack, which is then executed, logging 'Timeout callback'.
+
+### Microtasks and Macrotasks
+
+In addition to the callback queue, JavaScript has a concept of microtasks and macrotasks:
+
+- **Microtasks**: These include promises and `process.nextTick` in Node.js. Microtasks are executed immediately after the currently executing script and before the event loop continues.
+- **Macrotasks**: These include `setTimeout`, `setInterval`, and I/O tasks. They are handled in the callback queue.
+
+Microtasks have higher priority and are processed before the event loop continues to the next macrotask.
+
+### Example with Promises
+
+```javascript
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout callback");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("Promise callback");
+});
+
+console.log("End");
+```
+
+1. **Execution Begins**: `console.log('Start')` is executed.
+2. **setTimeout**: `setTimeout` callback is added to the macrotask queue.
+3. **Promise**: Promise callback is added to the microtask queue.
+4. **End Log**: `console.log('End')` is executed.
+5. **Microtask Execution**: Promise callback is executed before the macrotask.
+6. **Macrotask Execution**: `setTimeout` callback is executed.
+
+The output will be:
+
+```
+Start
+End
+Promise callback
+Timeout callback
+```
+
+The event loop ensures that JavaScript can handle asynchronous operations efficiently, maintaining a smooth user experience and preventing blocking code execution.
