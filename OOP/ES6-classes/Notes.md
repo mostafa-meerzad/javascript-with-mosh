@@ -134,6 +134,70 @@ rect.area = 100;
 console.log(rect.width); // Output: 20
 ```
 
+### Method Overriding
+
+If it happens to have an super-class that already implements a method with a specific name and you need to redefine that method in the sub-class you can just define a new method right in the sub-class with the exact name as in the super-class.
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log("Hello");
+  }
+}
+
+class Student extends Person {
+  constructor(name, age, lang, height) {
+    super(name, age);
+    this.lang = lang;
+    this.height = height;
+  }
+
+  greet() {
+    console.log(`Hello there, this it ${this.name}`);
+  }
+}
+
+const student = new Student("Mostafa", 24, "English", 175);
+student.greet(); // Hello there, this is Mostafa
+```
+
+the same way if you need to preserve the method implementation from the super-class into the sub-class you can do so by calling the `super.methodName()` as the first line of method body
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log("Hello");
+  }
+}
+
+class Student extends Person {
+  constructor(name, age, lang, height) {
+    super(name, age);
+    this.lang = lang;
+    this.height = height;
+  }
+
+  greet() {
+    super.greet();
+    console.log(`Hello there, this it ${this.name}`);
+  }
+}
+
+const student = new Student("Mostafa", 24, "English", 175);
+student.greet(); // Hello
+/////////////////// Hello there, this it Mostafa
+```
+
 ### Summary
 
 ES6 classes provide a more intuitive and cleaner syntax for creating objects and handling inheritance in JavaScript. They encapsulate data and functionality, making it easier to manage and extend code. With classes, JavaScript developers can write more maintainable and organized object-oriented code.
@@ -414,3 +478,224 @@ john.haveBirthday(); // "It's my birthday! I am now 31 years old."
 - You can use `bind` to ensure functions use the correct `this`.
 
 Understanding how `this` works in classes helps in managing instance properties and methods effectively, leading to more robust and predictable code.
+
+## Computed Property Names
+
+Computed property names in JavaScript allow you to use dynamic expressions as property keys in objects. This feature, introduced in ECMAScript 6 (ES6), enables you to create property names dynamically based on variables or expressions.
+
+### Syntax
+
+Computed property names are defined by enclosing the expression in square brackets `[]` within an object literal. The expression inside the brackets is evaluated, and the result is used as the property key.
+
+### Examples
+
+#### Using Variables
+
+You can use a variable as a computed property name:
+
+```javascript
+const propName = "name";
+const person = {
+  [propName]: "John",
+};
+
+console.log(person.name); // 'John'
+```
+
+In this example, the `propName` variable contains the string `'name'`, which is used as the property key for the `person` object.
+
+#### Using Expressions
+
+You can also use any valid expression as a computed property name:
+
+```javascript
+const propName = "age";
+const person = {
+  ["first" + "Name"]: "John",
+  [propName]: 30,
+};
+
+console.log(person.firstName); // 'John'
+console.log(person.age); // 30
+```
+
+In this example, `'first' + 'Name'` evaluates to `'firstName'`, which becomes a property key, and the value of `propName` is `'age'`, which is also used as a property key.
+
+### Using Computed Property Names in Methods
+
+Computed property names can also be used to define methods in an object:
+
+```javascript
+const methodName = "sayHello";
+const person = {
+  [methodName]() {
+    console.log("Hello!");
+  },
+};
+
+person.sayHello(); // 'Hello!'
+```
+
+### Combining Static and Computed Property Names
+
+You can combine static and computed property names within the same object literal:
+
+```javascript
+const propName = "dynamicProp";
+const obj = {
+  staticProp: "This is a static property",
+  [propName]: "This is a dynamic property",
+};
+
+console.log(obj.staticProp); // 'This is a static property'
+console.log(obj.dynamicProp); // 'This is a dynamic property'
+```
+
+### Dynamic Property Names in Classes
+
+Computed property names can also be used in classes to define dynamic method names:
+
+```javascript
+const methodName = "greet";
+
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  [methodName]() {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+}
+
+const john = new Person("John");
+john.greet(); // 'Hello, my name is John'
+```
+
+### Summary
+
+- **Computed Property Names**: Allow you to use dynamic expressions as property keys in object literals.
+- **Syntax**: Enclose the expression in square brackets `[]` within an object literal.
+- **Usage**: Useful for creating properties based on variables or expressions.
+- **Methods and Classes**: Can also be used to define dynamic method names in objects and classes.
+
+Computed property names enhance the flexibility and expressiveness of object literals in JavaScript, enabling you to create objects with dynamic and context-dependent property names.
+
+## Symbols
+
+Symbols in JavaScript are a relatively new and unique primitive data type introduced in ECMAScript 6 (ES6). They provide a way to create unique and immutable identifiers, which can be used as keys for object properties. Unlike other primitive data types (like strings, numbers, or booleans), every Symbol is unique, even if they have the same description.
+
+### Creating Symbols
+
+You can create a Symbol using the `Symbol()` function. Each call to `Symbol()` creates a new, unique Symbol.
+
+```javascript
+const symbol1 = Symbol();
+const symbol2 = Symbol();
+
+console.log(symbol1 === symbol2); // false
+```
+
+You can also provide an optional description to a Symbol for debugging purposes. However, the description does not affect the uniqueness of the Symbol.
+
+```javascript
+const symbol1 = Symbol("description");
+const symbol2 = Symbol("description");
+
+console.log(symbol1 === symbol2); // false
+```
+
+### Using Symbols as Object Properties
+
+Symbols are often used as property keys for objects to avoid property name collisions and ensure the properties are unique.
+
+```javascript
+const sym = Symbol("uniqueKey");
+const obj = {
+  [sym]: "value",
+};
+
+console.log(obj[sym]); // 'value'
+```
+
+### Symbols and Object Properties
+
+Symbols do not appear in `for...in` loops or `Object.keys()` method, but they can be accessed using `Object.getOwnPropertySymbols()` or `Reflect.ownKeys()`.
+
+```javascript
+const sym = Symbol("uniqueKey");
+const obj = {
+  [sym]: "value",
+  normalKey: "normalValue",
+};
+
+for (let key in obj) {
+  console.log(key); // 'normalKey'
+}
+
+console.log(Object.keys(obj)); // ['normalKey']
+console.log(Object.getOwnPropertySymbols(obj)); // [ Symbol(uniqueKey) ]
+console.log(Reflect.ownKeys(obj)); // ['normalKey', Symbol(uniqueKey)]
+```
+
+### Symbol.for() and Symbol.keyFor()
+
+The `Symbol.for()` method checks the global symbol registry to see if a Symbol with the given key already exists. If it does, it returns the existing Symbol. Otherwise, it creates a new Symbol and adds it to the global registry. This allows for the sharing of Symbols across different parts of your code.
+
+```javascript
+const globalSym1 = Symbol.for("globalKey");
+const globalSym2 = Symbol.for("globalKey");
+
+console.log(globalSym1 === globalSym2); // true
+```
+
+The `Symbol.keyFor()` method returns the key for a Symbol in the global symbol registry.
+
+```javascript
+const globalSym = Symbol.for("globalKey");
+console.log(Symbol.keyFor(globalSym)); // 'globalKey'
+```
+
+### Well-Known Symbols
+
+JavaScript includes several built-in Symbols, known as well-known symbols, which represent internal language behaviors that can be customized. Some of these include:
+
+- `Symbol.iterator`: Used to define the default iterator for an object.
+- `Symbol.asyncIterator`: Used to define the default async iterator for an object.
+- `Symbol.hasInstance`: Determines if a constructor object recognizes an object as its instance.
+- `Symbol.isConcatSpreadable`: Indicates if an object should be flattened to its array elements.
+- `Symbol.match`: Used to match a string against a regular expression.
+- `Symbol.replace`: Used to replace matched substrings of a string.
+- `Symbol.search`: Used to search for a substring within a string.
+- `Symbol.split`: Used to split a string at a specified delimiter.
+- `Symbol.toPrimitive`: Used to convert an object to a primitive value.
+- `Symbol.toStringTag`: Used to create a default string description for an object.
+- `Symbol.unscopables`: Used to specify which properties are excluded from the `with` environment bindings.
+
+### Example with `Symbol.iterator`
+
+Here's an example of how to use `Symbol.iterator` to make an object iterable:
+
+```javascript
+const myIterable = {
+  *[Symbol.iterator]() {
+    yield 1;
+    yield 2;
+    yield 3;
+  },
+};
+
+for (let value of myIterable) {
+  console.log(value); // 1, 2, 3
+}
+```
+
+### Summary
+
+- **Symbols** are a primitive data type used to create unique and immutable identifiers.
+- Symbols can be used as property keys for objects, ensuring the properties are unique and avoiding name collisions.
+- Symbols do not appear in normal property enumeration methods but can be accessed using `Object.getOwnPropertySymbols()` or `Reflect.ownKeys()`.
+- `Symbol.for()` and `Symbol.keyFor()` provide a way to create and retrieve Symbols from a global symbol registry.
+- Well-known symbols represent internal language behaviors that can be customized.
+
+Symbols are a powerful feature in JavaScript that help in creating unique keys for object properties and customizing object behaviors.
