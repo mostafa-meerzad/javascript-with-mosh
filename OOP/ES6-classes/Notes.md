@@ -435,7 +435,7 @@ john.haveBirthday(); // "It's my birthday! I am now 31 years old."
      increment() {
        // Regular function
        setTimeout(function () {
-         console.log(this.count); // undefined (or error in strict mode)
+         console.lo g(this.count); // undefined (or error in strict mode)
        }, 1000);
 
        // Arrow function
@@ -699,3 +699,364 @@ for (let value of myIterable) {
 - Well-known symbols represent internal language behaviors that can be customized.
 
 Symbols are a powerful feature in JavaScript that help in creating unique keys for object properties and customizing object behaviors.
+
+## Private Properties using Symbols
+
+Here's how each approach works:
+
+### Using Symbols
+
+Symbols are unique and immutable, making them useful for creating "hidden" properties.
+
+```javascript
+const _privateProperty = Symbol("privateProperty");
+
+class MyClass {
+  constructor(value) {
+    this[_privateProperty] = value;
+  }
+
+  getPrivateProperty() {
+    return this[_privateProperty];
+  }
+
+  setPrivateProperty(value) {
+    this[_privateProperty] = value;
+  }
+}
+
+const obj = new MyClass("initial value");
+console.log(obj.getPrivateProperty()); // Outputs: initial value
+
+obj.setPrivateProperty("new value");
+console.log(obj.getPrivateProperty()); // Outputs: new value
+
+console.log(obj[_privateProperty]); // Outputs: new value, but it's not truly private
+console.log(Object.getOwnPropertySymbols(obj)); // Outputs: [ Symbol(privateProperty) ]
+```
+
+### Using WeakMaps
+
+WeakMaps are collections of key/value pairs where keys are objects and values can be arbitrary values. WeakMaps are not enumerable, which makes them a good choice for private properties.
+
+```javascript
+const privateProperties = new WeakMap();
+
+class MyClass {
+  constructor(value) {
+    privateProperties.set(this, { privateProperty: value });
+  }
+
+  getPrivateProperty() {
+    return privateProperties.get(this).privateProperty;
+  }
+
+  setPrivateProperty(value) {
+    privateProperties.get(this).privateProperty = value;
+  }
+}
+
+const obj = new MyClass("initial value");
+console.log(obj.getPrivateProperty()); // Outputs: initial value
+
+obj.setPrivateProperty("new value");
+console.log(obj.getPrivateProperty()); // Outputs: new value
+
+console.log(privateProperties.get(obj)); // Outputs: { privateProperty: 'new value' }, but it's not accessible without the WeakMap reference
+```
+
+### Comparison and Usage
+
+1. **Symbols**:
+
+   - Symbols can be used to create property keys that are not accessible through typical property enumeration.
+   - However, they are not truly private, as they can still be accessed if the symbol is known or retrieved through `Object.getOwnPropertySymbols`.
+
+2. **WeakMaps**:
+   - WeakMaps provide a more robust way of encapsulating private data.
+   - They ensure the data is only accessible within the scope where the WeakMap is defined and not enumerable.
+   - They also help with garbage collection, as the entries are removed when the key objects are no longer reachable.
+
+### Example Using Both Symbols and WeakMaps
+
+Here's a combined example showing both methods:
+
+```javascript
+const _symbolPrivateProperty = Symbol("privateProperty");
+const weakMapPrivateProperties = new WeakMap();
+
+class MyClass {
+  constructor(value1, value2) {
+    this[_symbolPrivateProperty] = value1;
+    weakMapPrivateProperties.set(this, { privateProperty: value2 });
+  }
+
+  getSymbolPrivateProperty() {
+    return this[_symbolPrivateProperty];
+  }
+
+  setSymbolPrivateProperty(value) {
+    this[_symbolPrivateProperty] = value;
+  }
+
+  getWeakMapPrivateProperty() {
+    return weakMapPrivateProperties.get(this).privateProperty;
+  }
+
+  setWeakMapPrivateProperty(value) {
+    weakMapPrivateProperties.get(this).privateProperty = value;
+  }
+}
+
+const obj = new MyClass("symbol value", "weakmap value");
+
+console.log(obj.getSymbolPrivateProperty()); // Outputs: symbol value
+console.log(obj.getWeakMapPrivateProperty()); // Outputs: weakmap value
+
+obj.setSymbolPrivateProperty("new symbol value");
+obj.setWeakMapPrivateProperty("new weakmap value");
+
+console.log(obj.getSymbolPrivateProperty()); // Outputs: new symbol value
+console.log(obj.getWeakMapPrivateProperty()); // Outputs: new weakmap value
+
+console.log(Object.getOwnPropertySymbols(obj)); // Outputs: [ Symbol(privateProperty) ]
+console.log(weakMapPrivateProperties.get(obj)); // Outputs: { privateProperty: 'new weakmap value' }
+```
+
+### Conclusion
+
+Using Symbols and WeakMaps for private properties in JavaScript provides a level of encapsulation and helps manage data in a way that is not directly accessible through usual object property enumeration. However, the `#` syntax introduced in ES2019 offers a more straightforward and native approach for creating private properties.
+
+## Private Properties the new Way
+
+In JavaScript, private properties in classes can be created using the `#` syntax. These properties are only accessible within the class they are defined in and cannot be accessed or modified directly from outside the class. Here's how you can do it:
+
+### Basic Example
+
+```javascript
+class MyClass {
+  // Define a private property with the #
+  #privateProperty;
+
+  constructor(value) {
+    this.#privateProperty = value;
+  }
+
+  // Public method to access the private property
+  getPrivateProperty() {
+    return this.#privateProperty;
+  }
+
+  // Public method to modify the private property
+  setPrivateProperty(value) {
+    this.#privateProperty = value;
+  }
+}
+
+const obj = new MyClass("initial value");
+console.log(obj.getPrivateProperty()); // Outputs: initial value
+
+obj.setPrivateProperty("new value");
+console.log(obj.getPrivateProperty()); // Outputs: new value
+
+console.log(obj.#privateProperty); // SyntaxError: Private field '#privateProperty' must be declared in an enclosing class
+```
+
+### Key Points
+
+1. **Declaration**: Private properties are declared using the `#` prefix.
+2. **Access**: They are only accessible within the class. Attempting to access them directly from outside the class will result in a syntax error.
+3. **Methods**: Public methods within the class can access and modify private properties.
+
+### Example with Multiple Private Properties
+
+```javascript
+class Person {
+  #firstName;
+  #lastName;
+
+  constructor(firstName, lastName) {
+    this.#firstName = firstName;
+    this.#lastName = lastName;
+  }
+
+  getFullName() {
+    return `${this.#firstName} ${this.#lastName}`;
+  }
+
+  setFirstName(firstName) {
+    this.#firstName = firstName;
+  }
+
+  setLastName(lastName) {
+    this.#lastName = lastName;
+  }
+}
+
+const person = new Person("John", "Doe");
+console.log(person.getFullName()); // Outputs: John Doe
+
+person.setFirstName("Jane");
+console.log(person.getFullName()); // Outputs: Jane Doe
+
+console.log(person.#firstName); // SyntaxError: Private field '#firstName' must be declared in an enclosing class
+```
+
+### Using Getter and Setter Methods
+
+Using getter and setter methods allows controlled access to private properties:
+
+```javascript
+class BankAccount {
+  #balance;
+
+  constructor(initialBalance) {
+    this.#balance = initialBalance;
+  }
+
+  // Getter method
+  get balance() {
+    return this.#balance;
+  }
+
+  // Setter method
+  set balance(amount) {
+    if (amount >= 0) {
+      this.#balance = amount;
+    } else {
+      console.error("Invalid balance amount");
+    }
+  }
+}
+
+const account = new BankAccount(1000);
+console.log(account.balance); // Outputs: 1000
+
+account.balance = 1500;
+console.log(account.balance); // Outputs: 1500
+
+account.balance = -500; // Outputs: Invalid balance amount
+console.log(account.balance); // Outputs: 1500
+```
+
+### Conclusion
+
+Using the `#` syntax is the most straightforward way to create private properties in JavaScript classes. This feature ensures encapsulation and keeps the internal state of objects secure from outside interference.
+
+## Maps explained
+
+A `Map` in JavaScript is a collection of key-value pairs where both keys and values can be of any data type. Unlike plain JavaScript objects, `Map` instances maintain the order of their elements and provide a variety of methods to manipulate the entries.
+
+Here are some key characteristics and features of `Map`:
+
+1. **Ordered**: `Map` maintains the order of the key-value pairs based on the insertion sequence. When you iterate over a `Map`, the entries are returned in the order they were added.
+
+2. **Key Flexibility**: Keys in a `Map` can be of any type, including objects, functions, and primitives. This is different from objects, where keys are typically strings or symbols.
+
+3. **Size Property**: A `Map` has a `size` property that returns the number of key-value pairs in the map.
+
+4. **Iteration**: `Map` provides several methods to iterate over its elements:
+
+   - `keys()`: Returns an iterator over the keys in the map.
+   - `values()`: Returns an iterator over the values in the map.
+   - `entries()`: Returns an iterator over the key-value pairs in the map.
+   - `forEach(callback)`: Executes a provided function once for each key-value pair in the map.
+
+5. **Methods**: `Map` provides several methods for interacting with the entries:
+   - `set(key, value)`: Adds or updates an element with the specified key and value.
+   - `get(key)`: Returns the value associated with the specified key, or `undefined` if the key is not found.
+   - `has(key)`: Returns a boolean indicating whether an element with the specified key exists.
+   - `delete(key)`: Removes the element with the specified key.
+   - `clear()`: Removes all elements from the map.
+
+Here is an example demonstrating the usage of `Map`:
+
+```javascript
+let map = new Map();
+
+// Adding key-value pairs
+map.set("name", "Alice");
+map.set(1, "one");
+map.set(true, "boolean");
+
+// Accessing values
+console.log(map.get("name")); // Output: Alice
+console.log(map.get(1)); // Output: one
+console.log(map.get(true)); // Output: boolean
+
+// Checking for keys
+console.log(map.has("name")); // Output: true
+console.log(map.has("age")); // Output: false
+
+// Removing a key-value pair
+map.delete("name");
+console.log(map.has("name")); // Output: false
+
+// Size of the map
+console.log(map.size); // Output: 2
+
+// Iterating over the map
+map.forEach((value, key) => {
+  console.log(key, value);
+});
+// Output:
+// 1 one
+// true boolean
+
+// Using for...of loop to iterate
+for (let [key, value] of map) {
+  console.log(key, value);
+}
+// Output:
+// 1 one
+// true boolean
+
+// Clearing all elements
+map.clear();
+console.log(map.size); // Output: 0
+```
+
+In this example, we create a `Map`, add key-value pairs using `set`, retrieve values with `get`, check for the presence of keys using `has`, remove entries with `delete`, and clear all entries with `clear`. The iteration methods `forEach` and `for...of` are also demonstrated to show how to loop through the map's elements.
+
+## WeakMap explained
+
+A `WeakMap` in JavaScript is a special kind of `Map` that holds "weak" references to its keys. This means that if there are no other references to an object that is used as a key in a `WeakMap`, the garbage collector can free the memory used by that object. This makes `WeakMap` useful for scenarios where you want to associate data with objects but don't want to prevent those objects from being garbage collected if they are no longer needed elsewhere.
+
+Here are some key points about `WeakMap`:
+
+1. **Keys Must Be Objects**: Unlike a regular `Map`, the keys in a `WeakMap` must be objects. Primitive values (like strings, numbers, etc.) cannot be used as keys.
+
+2. **No Enumeration**: You cannot get a list of keys or entries in a `WeakMap`. There are no methods like `keys()`, `values()`, or `entries()` available. This is because the keys are held weakly and can be garbage collected at any time, making it impossible to enumerate them reliably.
+
+3. **Garbage Collection**: If no other references to an object used as a key exist, that object can be garbage collected, and its entry in the `WeakMap` will be removed automatically.
+
+4. **Methods**: `WeakMap` provides four main methods:
+   - `set(key, value)`: Adds a new element with the specified key and value to the `WeakMap`.
+   - `get(key)`: Returns the value associated with the specified key, or `undefined` if the key doesn't exist in the `WeakMap`.
+   - `delete(key)`: Removes the specified element from the `WeakMap`.
+   - `has(key)`: Returns a boolean indicating whether an element with the specified key exists in the `WeakMap`.
+
+Here's a simple example demonstrating the use of `WeakMap`:
+
+```javascript
+let weakMap = new WeakMap();
+
+let obj1 = { name: "John" };
+let obj2 = { name: "Doe" };
+
+weakMap.set(obj1, "Engineer");
+weakMap.set(obj2, "Designer");
+
+console.log(weakMap.get(obj1)); // Output: Engineer
+console.log(weakMap.get(obj2)); // Output: Designer
+
+obj1 = null; // Now the object { name: 'John' } is eligible for garbage collection
+
+// After garbage collection, the entry for obj1 in the WeakMap will be removed
+console.log(weakMap.get(obj1)); // Output: undefined
+console.log(weakMap.has(obj1)); // Output: false
+```
+
+In this example, when `obj1` is set to `null`, the `{ name: 'John' }` object can be garbage collected, and its associated entry in the `WeakMap` will be removed.
+
+`WeakMap` is particularly useful for memory-sensitive tasks, such as caching or storing metadata for objects without affecting their lifecycle.
