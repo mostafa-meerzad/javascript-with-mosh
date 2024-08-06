@@ -166,7 +166,7 @@ const student = new Student("Mostafa", 24, "English", 175);
 student.greet(); // Hello there, this is Mostafa
 ```
 
-the same way if you need to preserve the method implementation from the super-class into the sub-class you can do so by calling the `super.methodName()` as the first line of method body
+the same way if you need to preserve the method implementation from the super-class into the sub-class in other words if you need some of that method's implementation logic from the super-class you can do so by calling the `super.methodName()` as the first line of method body
 
 ```js
 class Person {
