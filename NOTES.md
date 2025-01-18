@@ -1299,8 +1299,8 @@ const video = {
 
   showTags() {
     this.tags.forEach((tag) => {
-      console.log(self.title, tag);
-      // this arrow function inherited it's "this" from "showTags" method which is the containing function
+      console.log(this.title, tag);
+      // this arrow function inherited its "this" from "showTags" method which is the containing function
     });
   },
 };
